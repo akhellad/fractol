@@ -1,5 +1,6 @@
 #include "./mlx/mlx.h"
 #include <stdio.h>
+#include <math.h>
 
 typedef struct	s_data 
 {
@@ -10,48 +11,58 @@ typedef struct	s_data
 	int		endian;
 }			t_data;
 
-typedef struct	s_vars {
-	void	*mlx;
-	void	*mlx_win;
-}				t_vars;
-
-typedef	struct s_fractal {
-	float xscale;
-	float yscale;
-	float zx;
-	float zy;
-	float cx;
-	float tempx;
-	float cy;
-	float xside;
-	float yside;
-	float top;
-	float left;
-	int x;
-	int y;
-	int count;
-	int MAXCOUNT;
-}			t_fractal;
-
 typedef	struct s_frac {
-	float x1;
-	float y1;
-	float zx;
-	float zy;
-	float cx;
-	float tempx;
-	float cy;
-	float image_x;
-	float image_y;
-	float x2;
-	float y2;
-	float zoom_x;
-	float zoom_y;
+	double x1;
+	double y1;
+	double zx;
+	double zy;
+	double cx;
+	double tempx;
+	double cy;
+	double image_x;
+	double image_y;
+	double x2;
+	double y2;
+	double zoom_x;
+	double zoom_y;
+	double pos_x;
+	double pos_y;
 	int x;
 	int y;
 	int count;
 	int iteration_max;
+	int win_len;
+	double h;
+	double p;
+	double m;
+	double nx;
+	double ny; 
+	char *name;
 }			t_frac;
+
+typedef struct	s_win {
+	void	*mlx;
+	void	*mlx_win;
+	t_data	img1;
+	t_frac	frac;
+}				t_win;
+
+int	ft_strcmp(char *s1, char *s2)
+{
+	unsigned int	i;
+
+	i = 0;
+	while (s1[i] || s2[i])
+	{
+		if (s1[i] == s2[i])
+		{
+			i ++;
+		}
+		else
+			return (1);
+	}
+	return (0);
+}
 
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
@@ -61,112 +72,209 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 	*(unsigned int*)dst = color;
 }
 
-void	mlxinit(t_data *img, t_vars *vars)
+void	mlxinit(t_win *win)
 {
-	vars->mlx = mlx_init();
-	vars->mlx_win = mlx_new_window(vars->mlx, 1000, 700, "first window");
-	img->img = mlx_new_image(vars->mlx, 1000, 700);
-	img->addr = mlx_get_data_addr(img->img, &img->bits_per_pixel, &img->line_length, &img->endian);
+	win->mlx = mlx_init();
+	win->mlx_win = mlx_new_window(win->mlx, 700, 700, "first window");
+	win->img1.img = mlx_new_image(win->mlx, 700, 700);
+	win->img1.addr = mlx_get_data_addr(win->img1.img, &win->img1.bits_per_pixel, &win->img1.line_length, &win->img1.endian);
 }
 
-void	julia(t_frac frac, int win_len, t_data *img, t_vars *vars)
+void	julia(t_win *win)
 {
-	frac.x1 = -1;
-	frac.x2 = 1;
-	frac.y1 = -1.2;
-	frac.y2 = 1.2;
-	frac.image_x = 1000;
-	frac.image_y = 1000;
-	frac.iteration_max = 80;
-	frac.x = 0;
-	frac.y = 0;
+	win->frac.x1 = -1 * win->frac.h;
+	win->frac.x2 = 1 * win->frac.h;
+	win->frac.y1 = -1.2 * win->frac.h;
+	win->frac.y2 = 1.2 * win->frac.h;
+	win->frac.image_x = 700;
+	win->frac.image_y = 700;
+	win->frac.iteration_max = 100 * win->frac.m;
+	win->frac.x = 0;
+	win->frac.y = 0;
 
-	frac.zoom_x = frac.image_x / (frac.x2 - frac.x1);
-	frac.zoom_y = frac.image_y / (frac.y2 - frac.y1);
+	win->frac.zoom_x = win->frac.image_x / (win->frac.x2 - win->frac.x1);
+	win->frac.zoom_y = win->frac.image_y / (win->frac.y2 - win->frac.y1);
 
-	while(frac.x < frac.image_x)
+	while(win->frac.x < win->frac.image_x)
 	{
-		while(frac.y < frac.image_y)
+		while(win->frac.y < win->frac.image_y)
 		{
-			frac.zx = frac.x / frac.zoom_x + frac.x1;
-			frac.zy = frac.y / frac.zoom_y + frac.y1;
-			frac.cx = 0.285;
-			frac.cy = 0.01;
-			frac.count = 0;
-			while (frac.zx*frac.zx + frac.zy*frac.zy < 4 && frac.count < frac.iteration_max)
+			win->frac.zx = win->frac.x / win->frac.zoom_x + win->frac.x1;
+			win->frac.zy = win->frac.y / win->frac.zoom_y + win->frac.y1;
+			win->frac.cx = 0.285 * win->frac.p;
+			win->frac.cy = 0.01 * win->frac.p;
+			win->frac.count = 0;
+			while (win->frac.zx*win->frac.zx + win->frac.zy*win->frac.zy < 4 && win->frac.count < win->frac.iteration_max)
 			{
-				frac.tempx = frac.zx;
-				frac.zx = frac.zx * frac.zx - frac.zy * frac.zy + frac.cx;
-				frac.zy = 2 * frac.zy * frac.tempx + frac.cy;
-				frac.count += 1;
-				if (frac.count == frac.iteration_max)
-					my_mlx_pixel_put(img, frac.x, frac.y, 0x00000);
+				win->frac.tempx = win->frac.zx;
+				win->frac.zx = win->frac.zx * win->frac.zx - win->frac.zy * win->frac.zy + win->frac.cx;
+				win->frac.zy = 2 * win->frac.zy * win->frac.tempx + win->frac.cy;
+				win->frac.count += 1;
+				if (win->frac.count == win->frac.iteration_max)
+					my_mlx_pixel_put(&win->img1, win->frac.x, win->frac.y, 0x00000);
 			}
-			if (frac.count != frac.iteration_max)
-				my_mlx_pixel_put(img, frac.x, frac.y, frac.count * 10000);
-			frac.y ++;
+			if (win->frac.count != win->frac.iteration_max)
+				my_mlx_pixel_put(&win->img1, win->frac.x, win->frac.y, (((double)win->frac.count - log2(log2((win->frac.zx  * win->frac.zx ) + (win->frac.zy * win->frac.zy))) + 6.0) * 50));
+			win->frac.y ++;
 		}
-		frac.y = 0;
-		frac.x ++;
+		win->frac.y = 0;
+		win->frac.x ++;
+	}
+	mlx_put_image_to_window(win->mlx, win->mlx_win, win->img1.img, 0, 0);
+}
+
+int		pick_frac(t_frac *frac)
+{
+	if (!ft_strcmp(frac->name, "mendel"))
+		return (1);
+	if (!ft_strcmp(frac->name, "julia"))
+		return (2);
+	return (0);
+}
+
+void	mendel(t_win *window)
+{
+	window->frac.x1 = (-2.0 * window->frac.h) + window->frac.pos_x;
+	window->frac.x2 = window->frac.pos_x + (0.6 * window->frac.h);
+	window->frac.y1 = window->frac.pos_y + (-1.2 * window->frac.h );
+	window->frac.y2 = window->frac.pos_y + (1.2 * window->frac.h);
+	window->frac.image_x = window->frac.win_len;
+	window->frac.image_y = window->frac.win_len;
+	window->frac.iteration_max = 30;
+	window->frac.x = 0;
+	window->frac.y = 0;
+
+	window->frac.zoom_x = (window->frac.image_x / (window->frac.x2 - window->frac.x1));
+	window->frac.zoom_y = (window->frac.image_y / (window->frac.y2 - window->frac.y1));
+
+	while(window->frac.x < window->frac.image_x)
+	{
+		while(window->frac.y < window->frac.image_y)
+		{
+			window->frac.cx = (window->frac.x / window->frac.zoom_x + window->frac.x1);
+			window->frac.cy = (window->frac.y / window->frac.zoom_y + window->frac.y1);
+			window->frac.zx = 0;
+			window->frac.zy = 0;
+			window->frac.count = 0;
+			while (window->frac.zx*window->frac.zx + window->frac.zy*window->frac.zy < 4 && window->frac.count < window->frac.iteration_max)
+			{
+				window->frac.tempx = window->frac.zx;
+				window->frac.zx = window->frac.zx * window->frac.zx - window->frac.zy * window->frac.zy + window->frac.cx;
+				window->frac.zy = 2 * window->frac.zy * window->frac.tempx + window->frac.cy;
+				window->frac.count += 1;
+				if (window->frac.count == window->frac.iteration_max)
+					my_mlx_pixel_put(&window->img1, window->frac.x, window->frac.y, 0x00000);
+			}
+			if (window->frac.count != window->frac.iteration_max)
+				my_mlx_pixel_put(&window->img1, window->frac.x, window->frac.y, \
+				(((double)window->frac.count - log2(log2((window->frac.zx  * window->frac.zx) + (window->frac.zy * window->frac.zy))) + 4.0) * 20));
+			window->frac.y ++;
+		}
+		window->frac.y = 0;
+		window->frac.x ++;
+		mlx_put_image_to_window(window->mlx, window->mlx_win, window->img1.img, 0, 0);
 	}
 
 }
 
-void	mendel(t_frac frac, int win_len, t_data *img, t_vars *vars)
+
+int mouse_hook(int keycode, int x, int y, t_win *window)
 {
-	frac.x1 = -2.1;
-	frac.x2 = 0.6;
-	frac.y1 = -1.2;
-	frac.y2 = 1.2;
-	frac.image_x = win_len;
-	frac.image_y = win_len;
-	frac.iteration_max = 30;
-	frac.x = 0;
-	frac.y = 0;
+	double	mouse_x_pos;
+	double	mouse_y_pos;
 
-	frac.zoom_x = frac.image_x / (frac.x2 - frac.x1);
-	frac.zoom_y = frac.image_y / (frac.y2 - frac.y1);
-
-	while(frac.x < frac.image_x)
+	mouse_x_pos = (x + window->frac.win_len / 2) / window->frac.h;
+	mouse_y_pos = (y + window->frac.win_len / 2) / window->frac.h;	
+	if (keycode == 5)
 	{
-		while(frac.y < frac.image_y)
-		{
-			frac.cx = frac.x / frac.zoom_x + frac.x1;
-			frac.cy = frac.y / frac.zoom_y + frac.y1;
-			frac.zx = 0;
-			frac.zy = 0;
-			frac.count = 0;
-			while (frac.zx*frac.zx + frac.zy*frac.zy < 4 && frac.count < frac.iteration_max)
-			{
-				frac.tempx = frac.zx;
-				frac.zx = frac.zx * frac.zx - frac.zy * frac.zy + frac.cx;
-				frac.zy = 2 * frac.zy * frac.tempx + frac.cy;
-				frac.count += 1;
-				if (frac.count == frac.iteration_max)
-					my_mlx_pixel_put(img, frac.x, frac.y, 0x00000);
-			}
-			if (frac.count != frac.iteration_max)
-				my_mlx_pixel_put(img, frac.x, frac.y, frac.count * 10000);
-			frac.y ++;
-		}
-		frac.y = 0;
-		frac.x ++;
+		window->frac.pos_x += 0.174 * mouse_x_pos;
+		window->frac.pos_y += 0.174 * mouse_y_pos;
+		window->frac.h /= 1.1;
+		window->frac.m *= 1.001;
+		if(pick_frac(&window->frac) == 1)
+			mendel(window);
+		if(pick_frac(&window->frac) == 2)
+			julia(window);
 	}
-
+	if (keycode == 4)
+	{
+		window->frac.pos_x -= 0.2 * mouse_x_pos;
+		window->frac.pos_y -= 0.2 * mouse_y_pos;		
+		window->frac.h *= 1.2;
+		window->frac.m /= 1.001;
+		if(pick_frac(&window->frac) == 1)
+			mendel(window);
+		if(pick_frac(&window->frac) == 2)
+			julia(window);
+	}
+	if (keycode == 1)
+	{
+		window->frac.nx = x;
+		window->frac.ny = y;
+		if(pick_frac(&window->frac) == 1)
+			mendel(window);
+		if(pick_frac(&window->frac) == 2)
+			julia(window);
+	}
+	return (0);
 }
+
+int	change(int keycode, t_win *win)
+{
+	if(keycode == 124)
+	{
+	win->frac.p /= 1.001;
+	win->frac.nx += 1;
+	if(pick_frac(&win->frac) == 1)
+		mendel(win);
+	if(pick_frac(&win->frac) == 2)
+		julia(win);
+	}
+	if (keycode == 123)
+	{
+	win->frac.p *= 1.001;
+	win->frac.nx -= 1;
+	if(pick_frac(&win->frac) == 1)
+		mendel(win);
+	if(pick_frac(&win->frac) == 2)
+		julia(win);
+	}
+	if (keycode == 69)
+	{
+	win->frac.h /= 1.1;
+	if(pick_frac(&win->frac) == 1)
+		mendel(win);
+	if(pick_frac(&win->frac) == 2)
+		julia(win);
+	}
+	if (keycode == 78)
+	{
+	win->frac.h *= 1.1;
+	if(pick_frac(&win->frac) == 1)
+		mendel(win);
+	if(pick_frac(&win->frac) == 2)
+		julia(win);
+	}
+	return 0;
+}
+
 
 int main ()
 {
-	t_vars	vars;
-	t_data	img;
-	t_frac fractal;
-	int win_len = 1000;
+	t_win	win;
 
-	vars.mlx = mlx_init();
-	vars.mlx_win = mlx_new_window(vars.mlx, win_len, win_len, "first window");
-	img.img = mlx_new_image(vars.mlx, 1000, 1000);
-	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length, &img.endian);
-	julia(fractal, win_len, &img, &vars);
-	mlx_put_image_to_window(vars.mlx, vars.mlx_win, img.img, 0, 0);
-	mlx_loop(vars.mlx);
+	win.frac.h = 1;
+	win.frac.p = 1;
+	win.frac.m = 1;
+	win.frac.pos_x = 0;
+	win.frac.pos_y = 0;
+	win.frac.name = "mendel";
+	win.mlx = mlx_init();
+	win.mlx_win = mlx_new_window(win.mlx, 700, 700, "first window");
+	win.img1.img = mlx_new_image(win.mlx, 700, 700);
+	win.img1.addr = mlx_get_data_addr(win.img1.img, &win.img1.bits_per_pixel, &win.img1.line_length, &win.img1.endian);
+	win.frac.win_len = 700;
+	mlx_mouse_hook(win.mlx_win, mouse_hook, &win);
+	mlx_key_hook(win.mlx_win, change , &win);
+	mlx_loop(win.mlx);
 }
