@@ -1,26 +1,50 @@
-SRCS = fractol.c
-OBJS = ${SRCS:.c=.o}
-BONUS_OBJS	= $(BONUS:.c=.o)
-NAME = fractol
-CC = gcc
-CFLAGS = -Wall -Wextra -Werror -g
-RM = rm -f
-ARRC = ar rc
-HEADER = mlx.h
+NAME	=	fractol
+OS		=	${shell uname}
 
-all: ${NAME} ${MLX_INC}
 
-%.o: %.c
-	$(CC) -Wall -Wextra -Werror -Imlx -c $< -o $@
+SRCDIR	=	./src
+INCDIR	=	./includes
+OBJDIR	=	./obj
 
+SRC		=	fractol.c \
+			utils.c \
+			hooks.c \
+			fractals.c
+
+OBJ		= 	$(addprefix $(OBJDIR)/,$(SRC:.c=.o))
+
+CC		=	gcc
+CFLAGS	=	-Wall -Wextra -Werror -g
+
+MLX_INC	=	-I $(MLX)
+MLX_LIB	=	$(addprefix $(MLX),mlx.a)
+MLX		=	./mlx
+
+ifeq ($(OS), Linux)
+	MLX_LNK	= -L $(MLX) -l mlx -lXext -lX11  
+else
+	MLX_LNK	= -L $(MLX) -l mlx -framework OpenGL -framework AppKit
+endif
+
+
+all: obj ${NAME}
+
+obj: 
+	mkdir ${OBJDIR}
+
+${OBJDIR}/%.o:${SRCDIR}/%.c
+	$(CC) ${CFLAGS} ${MLX_INC} -I ${INCDIR} -o $@ -c $<
+
+$(MLX_LIB):
+	make -C $(MLX)
 
 $(NAME): $(OBJ)
-	$(CC) $(OBJ) -Lmlx -framework OpenGL -framework AppKit -o $(NAME)
-	
-clean:
-	${RM} ${OBJS} $(BONUS_OBJS) 
+	$(CC) $(OBJ) ${MLX_LNK} -lm -o $(NAME)
 
-fclean:	clean
-	${RM} ${NAME}
+clean:
+	rm -rf $(OBJDIR)
+
+fclean: clean
+	rm -rf $(NAME)
 
 re: fclean all
