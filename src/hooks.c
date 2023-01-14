@@ -49,7 +49,7 @@ void    pick_color(int keycode, t_w *w)
 	}
 	if (keycode == KEY_THREE)
 	{
-		w->f.colors = 832100;
+		w->f.colors = 714903;
         pick_f(w);
 	}
 }
@@ -116,5 +116,22 @@ int	key_hook(int keycode, t_w *w)
     frac_moove(keycode, w);
     julia_changes(keycode, w);
     pick_color(keycode, w);
+	return (0);
+}
+
+int mouse_drag_hook(int x, int y, t_w *w)
+{
+	printf("%d\n%d\n",y ,x);
+	w->f.nx += 0.01 * ( x / w->f.zoom_y + w->f.x1);
+	w->f.ny -= 0.01 * ( y / w->f.zoom_y + w->f.y1);
+	pick_f(w);
+	return 0;
+}
+
+int mouse_motion_hook(int x, int y, t_w *w)
+{
+	w->j.cx = x / w->f.zoom_x + w->f.x1;
+	w->j.cy = -(y / w->f.zoom_y + w->f.y1);
+	pick_f(w);
 	return (0);
 }

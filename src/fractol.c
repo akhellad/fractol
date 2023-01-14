@@ -43,6 +43,18 @@ void	count(t_w *w)
 	}
 }
 
+void	count_burning_ship(t_w *w)
+{
+	while (w->f.zx*w->f.zx + w->f.zy*w->f.zy < 4 && w->f.count < w->f.iteration_max)
+	{
+		w->f.tempx = w->f.zx;
+		w->f.zx = w->f.zx * w->f.zx - w->f.zy * w->f.zy + w->f.cx;
+		w->f.zy = 2 * fabs(w->f.zy * w->f.tempx) + w->f.cy;
+		w->f.count += 1;
+	}
+}
+
+
 void		pick_f(t_w *w)
 {
 	if (!ft_strcmp(w->f.name, "mendel"))
@@ -70,6 +82,11 @@ int main (int argc, char **argv)
 	w.f.name = argv[1];
 	init_struct(&w);
 	mlx_mouse_hook(w.mlx_w, mouse_hook, &w);
-	mlx_key_hook(w.mlx_w, key_hook, &w);
+	mlx_hook(w.mlx_w, 2, 1L<<0, key_hook, &w);
+	if(!ft_strcmp(w.f.name, "julia"))
+	{
+		mlx_hook(w.mlx_w, 6, (1L << 6), mouse_motion_hook, &w);
+	}
+	mlx_hook(w.mlx_w, 6, (1L << 8), mouse_drag_hook, &w);
 	mlx_loop(w.mlx);
 }

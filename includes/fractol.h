@@ -4,6 +4,7 @@
 # include "../mlx/mlx.h"
 # include <stdio.h>
 # include <math.h>
+# include <stdlib.h>
 
 # define KEY_UP 65362
 # define KEY_DOWN 65364
@@ -31,10 +32,12 @@ typedef struct	s_data
 	int		endian;
 }			t_data;
 
-typedef struct s_var {
+typedef struct s_jul 
+{
+	double	cx;
+	double	cy;
 
-
-}              t_var;
+}              t_jul;
 
 typedef	struct s_f {
 	double x1;
@@ -63,7 +66,6 @@ typedef	struct s_f {
 	double nx;
 	double ny; 
 	char *name;
-	float Z;
 	int colors;
 }			t_f;
 
@@ -71,7 +73,8 @@ typedef struct	s_w {
 	void	*mlx;
 	void	*mlx_w;
 	t_data	img1;
-	t_f	f;
+	t_f		f;
+	t_jul	j;
 }				t_w;
 
 int		ft_strcmp(char *s1, char *s2);
@@ -82,5 +85,9 @@ void	mendel(t_w *w);
 int		key_hook(int keycode, t_w *w);
 void	count(t_w *w);
 void	draw(t_w *w);
+void    frac_moove(int keycode, t_w *w);
+int 	mouse_motion_hook(int x, int y, t_w *w);
+void	count_burning_ship(t_w *w);
+int 	mouse_drag_hook(int x, int y, t_w *w);
 
 #endif
