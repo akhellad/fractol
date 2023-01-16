@@ -1,4 +1,4 @@
-#include "fractol.h"
+#include "../includes/fractol.h"
 
 int mouse_hook(int keycode, int x, int y, t_w *w)
 {
@@ -92,6 +92,15 @@ void    frac_moove(int keycode, t_w *w)
 	}
 }
 
+void	stop_prog(int keycode, t_w *w)
+{
+	if (keycode == KEY_ESC)
+	{
+		mlx_destroy_window(w->mlx, w->mlx_w);
+		exit(1);
+	}
+}
+
 int	key_hook(int keycode, t_w *w)
 {
 	if (keycode == KEY_PLUS)
@@ -113,19 +122,17 @@ int	key_hook(int keycode, t_w *w)
 		w->f.ny = 0;
         pick_f(w);
 	}
+	stop_prog(keycode, w);
     frac_moove(keycode, w);
     julia_changes(keycode, w);
     pick_color(keycode, w);
 	return (0);
 }
 
-int mouse_drag_hook(int x, int y, t_w *w)
+int	destroy_window(t_w *w)
 {
-	printf("%d\n%d\n",y ,x);
-	w->f.nx += 0.01 * ( x / w->f.zoom_y + w->f.x1);
-	w->f.ny -= 0.01 * ( y / w->f.zoom_y + w->f.y1);
-	pick_f(w);
-	return 0;
+	mlx_destroy_window(w->mlx, w->mlx_w);
+	exit(1);
 }
 
 int mouse_motion_hook(int x, int y, t_w *w)

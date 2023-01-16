@@ -1,27 +1,38 @@
-#ifndef fTOL_H
-# define fTOL_H
+#ifndef FRACTOL_H
+# define FRACTOL_H
 
 # include "../mlx/mlx.h"
 # include <stdio.h>
 # include <math.h>
 # include <stdlib.h>
+# include <unistd.h>
 
-# define KEY_UP 65362
-# define KEY_DOWN 65364
-# define KEY_RIGHT 65363
-# define KEY_LEFT 65361
-# define KEY_O 111
-# define KEY_I 105
-# define KEY_P 112
-# define KEY_PLUS 65451
-# define KEY_MINUS 65453
-# define KEY_ONE 65436
-# define KEY_TWO 65433
-# define KEY_THREE 65435
-# define KEY_FOUR 65430
-# define KEY_FIVE 65437
-# define KEY_SIX 65432
-# define KEY_ESC 65307
+# define KEY_UP 126
+# define KEY_DOWN 125
+# define KEY_RIGHT 124
+# define KEY_LEFT 123
+# define KEY_O 31
+# define KEY_I 34
+# define KEY_P 35
+# define KEY_PLUS 69
+# define KEY_MINUS 78
+# define KEY_ONE 83
+# define KEY_TWO 84
+# define KEY_THREE 85
+# define KEY_FOUR 86
+# define KEY_FIVE 87
+# define KEY_SIX 88
+# define KEY_ESC 53
+
+enum {
+	ON_KEYDOWN = 2,
+	ON_KEYUP = 3,
+	ON_MOUSEDOWN = 4,
+	ON_MOUSEUP = 5,
+	ON_MOUSEMOVE = 6,
+	ON_EXPOSE = 12,
+	ON_DESTROY = 17
+};
 
 typedef struct	s_data 
 {
@@ -89,5 +100,10 @@ void    frac_moove(int keycode, t_w *w);
 int 	mouse_motion_hook(int x, int y, t_w *w);
 void	count_burning_ship(t_w *w);
 int 	mouse_drag_hook(int x, int y, t_w *w);
-
+void	mendel_calc(t_w *w);
+void	burning_ship(t_w *w);
+void	burning_ship_set(t_w *w);
+void	julia_set(t_w *w);
+void	stop_prog(int keycode, t_w *w);
+int		destroy_window(t_w *w);
 #endif

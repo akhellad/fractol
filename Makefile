@@ -9,7 +9,9 @@ OBJDIR	=	./obj
 SRC		=	fractol.c \
 			utils.c \
 			hooks.c \
-			fractals.c
+			mendel.c \
+			julia.c \
+			burning_ship.c
 
 OBJ		= 	$(addprefix $(OBJDIR)/,$(SRC:.c=.o))
 

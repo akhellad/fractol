@@ -1,4 +1,4 @@
-#include "fractol.h"
+#include "../includes/fractol.h"
 
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
@@ -61,6 +61,8 @@ void		pick_f(t_w *w)
 		mendel(w);
 	if (!ft_strcmp(w->f.name, "julia"))
 		julia(w);
+	if (!ft_strcmp(w->f.name, "burning_ship"))
+		burning_ship(w);
 }
 
 void	init_struct(t_w *w)
@@ -70,23 +72,37 @@ void	init_struct(t_w *w)
 	w->f.m = 1;
 	w->f.pos_x = 0;
 	w->f.pos_y = 0;
-	w->f.w_len = 700;
+	w->f.w_len = 500;
 	mlxinit(w);
+}
+
+int check_params(int ac, char **av)
+{
+ 	if(ac != 2)
+	{
+		write(1, "Erreur ! Veuillez choisir entre la fractale : mendel, julia ou burning_ship.\n", 78);
+		return (1);
+	}
+	if(ft_strcmp(av[1], "julia") && ft_strcmp(av[1], "mendel") && ft_strcmp(av[1], "burning_ship"))
+	{
+		write(1, "Erreur ! Veuillez choisir entre la fractale : mendel, julia ou burning_ship.\n", 78);
+		return (1);
+	}
+	return (0);
 }
 
 int main (int argc, char **argv)
 {
 	t_w	w;
 
-	(void)argc;
+	if (check_params(argc, argv))
+		return (0);
 	w.f.name = argv[1];
 	init_struct(&w);
 	mlx_mouse_hook(w.mlx_w, mouse_hook, &w);
 	mlx_hook(w.mlx_w, 2, 1L<<0, key_hook, &w);
+	mlx_hook(w.mlx_w, ON_DESTROY, 0L, destroy_window, &w);
 	if(!ft_strcmp(w.f.name, "julia"))
-	{
 		mlx_hook(w.mlx_w, 6, (1L << 6), mouse_motion_hook, &w);
-	}
-	mlx_hook(w.mlx_w, 6, (1L << 8), mouse_drag_hook, &w);
 	mlx_loop(w.mlx);
 }
