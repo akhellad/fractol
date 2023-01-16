@@ -16,7 +16,7 @@ SRC		=	fractol.c \
 OBJ		= 	$(addprefix $(OBJDIR)/,$(SRC:.c=.o))
 
 CC		=	gcc
-CFLAGS	=	-Wall -Wextra -Werror -g
+CFLAGS	=	-Wall -Wextra -Werror -o2 -march=native -g
 
 MLX_INC	=	-I $(MLX)
 MLX_LIB	=	$(addprefix $(MLX),mlx.a)

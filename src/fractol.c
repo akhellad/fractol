@@ -27,11 +27,10 @@ void	draw(t_w *w)
 	{
 		color = w->f.count * 256 / w->f.iteration_max;
 		n_color = 0;
-		n_color = w->f.colors + ((color / 8) << 24 | (color) << 16 | (color / 2) << 8 | 0);
+		n_color = w->f.colors + (0 << 24 | (color) << 16 | (color) << 8 | (color));
 		my_mlx_pixel_put(&w->img1, w->f.x, w->f.y, n_color);
 	}
 }
-
 void	count(t_w *w)
 {
 	while (w->f.zx*w->f.zx + w->f.zy*w->f.zy < 4 && w->f.count < w->f.iteration_max)
@@ -72,7 +71,8 @@ void	init_struct(t_w *w)
 	w->f.m = 1;
 	w->f.pos_x = 0;
 	w->f.pos_y = 0;
-	w->f.w_len = 500;
+	w->f.w_len = 1000;
+	w->f.j = 1;
 	mlxinit(w);
 }
 

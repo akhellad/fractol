@@ -78,6 +78,7 @@ typedef	struct s_f {
 	double ny; 
 	char *name;
 	int colors;
+	int j;
 }			t_f;
 
 typedef struct	s_w {

@@ -49,10 +49,21 @@ void    pick_color(int keycode, t_w *w)
 	}
 	if (keycode == KEY_THREE)
 	{
-		w->f.colors = 714903;
+		w->f.colors = 8104657;
+        pick_f(w);
+	}
+	if (keycode == KEY_FOUR)
+	{
+		w->f.colors = 1746987;
+        pick_f(w);
+	}
+	if (keycode == KEY_FIVE)
+	{
+		w->f.colors = 164176229;
         pick_f(w);
 	}
 }
+
 
 void    julia_changes(int keycode, t_w *w)
 {
