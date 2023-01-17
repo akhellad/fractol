@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   fractol.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akhellad <akhellad@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/01/17 14:00:16 by akhellad          #+#    #+#             */
+/*   Updated: 2023/01/17 17:11:54 by akhellad         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef FRACTOL_H
 # define FRACTOL_H
 
@@ -34,7 +46,7 @@ enum {
 	ON_DESTROY = 17
 };
 
-typedef struct	s_data 
+typedef struct s_data
 {
 	void	*img;
 	char	*addr;
@@ -43,45 +55,46 @@ typedef struct	s_data
 	int		endian;
 }			t_data;
 
-typedef struct s_jul 
+typedef struct s_jul
 {
 	double	cx;
 	double	cy;
 
-}              t_jul;
+}				t_jul;
 
-typedef	struct s_f {
-	double x1;
-	double y1;
-	double x2;
-	double y2;
-	double zx;
-	double zy;
-	double cx;
-	double cy;
-	double tempx;
-	double image_x;
-	double image_y;
-	double zoom_x;
-	double zoom_y;
-	double pos_x;
-	double pos_y;
-	int x;
-	int y;
-	int count;
-	int iteration_max;
-	int w_len;
-	double h;
-	double p;
-	double m;
-	double nx;
-	double ny; 
-	char *name;
-	int colors;
-	int j;
+typedef struct s_f {
+	double			x1;
+	double			y1;
+	double			x2;
+	double			y2;
+	double			zx;
+	double			zy;
+	double			cx;
+	double			cy;
+	double			tempx;
+	double			image_x;
+	double			image_y;
+	double			zoom_x;
+	double			zoom_y;
+	double			pos_x;
+	double			pos_y;
+	int				x;
+	int				y;
+	int				count;
+	int				iteration_max;
+	int				w_len;
+	double			h;
+	double			p;
+	double			m;
+	double			nx;
+	double			ny;
+	char			*name;
+	unsigned int	colors_out;
+	unsigned int	colors_in;
+	int				j;
 }			t_f;
 
-typedef struct	s_w {
+typedef struct s_w {
 	void	*mlx;
 	void	*mlx_w;
 	t_data	img1;
@@ -97,14 +110,21 @@ void	mendel(t_w *w);
 int		key_hook(int keycode, t_w *w);
 void	count(t_w *w);
 void	draw(t_w *w);
-void    frac_moove(int keycode, t_w *w);
-int 	mouse_motion_hook(int x, int y, t_w *w);
+void	frac_moove(int keycode, t_w *w);
+int		mouse_motion_hook(int x, int y, t_w *w);
 void	count_burning_ship(t_w *w);
-int 	mouse_drag_hook(int x, int y, t_w *w);
+int		mouse_drag_hook(int x, int y, t_w *w);
 void	mendel_calc(t_w *w);
 void	burning_ship(t_w *w);
 void	burning_ship_set(t_w *w);
 void	julia_set(t_w *w);
 void	stop_prog(int keycode, t_w *w);
 int		destroy_window(t_w *w);
+void	reset_frac(t_w *w);
+void	julia_changes(int keycode, t_w *w);
+void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
+void	pick_color(int keycode, t_w *w);
+void	pick_color_012(int keycode, t_w *w);
+void	pick_color_345(int keycode, t_w *w);
+
 #endif

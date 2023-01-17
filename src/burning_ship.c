@@ -1,10 +1,22 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   burning_ship.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akhellad <akhellad@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/01/17 13:42:21 by akhellad          #+#    #+#             */
+/*   Updated: 2023/01/17 15:25:47 by akhellad         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/fractol.h"
 
 void	burning_ship_set(t_w *w)
 {
-	while(w->f.x < w->f.image_x)
+	while (w->f.x < w->f.image_x)
 	{
-		while(w->f.y < w->f.image_y)
+		while (w->f.y < w->f.image_y)
 		{
 			w->f.cx = (w->f.x / w->f.zoom_x + w->f.x1);
 			w->f.cy = (w->f.y / w->f.zoom_y + w->f.y1);
@@ -22,9 +34,8 @@ void	burning_ship_set(t_w *w)
 
 void	burning_ship(t_w *w)
 {
-
-	w->f.x1 = (w->f.nx + (-2.1 * w->f.h));
-	w->f.x2 = (w->f.nx + (0.6 * w->f.h));
+	w->f.x1 = (w->f.nx + (-1.2 * w->f.h) - 0.6);
+	w->f.x2 = (w->f.nx + (1.2 * w->f.h) - 0.6);
 	w->f.y1 = (w->f.ny + (-1.2 * w->f.h));
 	w->f.y2 = (w->f.ny + (1.2 * w->f.h));
 	w->f.image_x = w->f.w_len;
@@ -32,7 +43,6 @@ void	burning_ship(t_w *w)
 	w->f.iteration_max = 150;
 	w->f.x = 0;
 	w->f.y = 0;
-
 	w->f.zoom_x = (w->f.image_x / (w->f.x2 - w->f.x1));
 	w->f.zoom_y = (w->f.image_y / (w->f.y2 - w->f.y1));
 	burning_ship_set(w);

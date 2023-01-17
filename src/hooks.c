@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   hooks.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akhellad <akhellad@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/01/17 13:43:08 by akhellad          #+#    #+#             */
+/*   Updated: 2023/01/17 17:13:36 by akhellad         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/fractol.h"
 
-int mouse_hook(int keycode, int x, int y, t_w *w)
+int	mouse_hook(int keycode, int x, int y, t_w *w)
 {
 	if (keycode == 5)
 	{
@@ -8,107 +20,87 @@ int mouse_hook(int keycode, int x, int y, t_w *w)
 		w->f.nx += 0.001 * ((x - w->f.w_len / 2) * (w->f.h));
 		w->f.ny += 0.001 * ((y - w->f.w_len / 2) * (w->f.h));
 		w->f.m *= 1.001;
-        pick_f(w);
+		pick_f(w);
 	}
 	if (keycode == 4)
 	{
 		w->f.h *= 1.1;
 		w->f.nx -= 0.001 * ((x - w->f.w_len / 2) * (w->f.h));
-		w->f.ny -= 0.001 * ((y - w->f.w_len / 2) * (w->f.h));		
+		w->f.ny -= 0.001 * ((y - w->f.w_len / 2) * (w->f.h));
 		w->f.m /= 1.001;
-        pick_f(w);
+		pick_f(w);
 	}
 	if (keycode == 1)
 	{
-		w->f.h = 1;
-		w->f.nx = 0;
-		w->f.ny = 0;
-		w->f.pos_x = 0;
-		w->f.pos_y = 0;
-        pick_f(w);
+		reset_frac(w);
 	}
 	return (0);
 }
 
-void    pick_color(int keycode, t_w *w)
+void	pick_color_012(int keycode, t_w *w)
 {
 	if (keycode == 82)
 	{
-		w->f.colors = 0;
-        pick_f(w);
+		w->f.colors_out = 0;
+		w->f.colors_in = 0;
+		pick_f(w);
 	}
 	if (keycode == KEY_ONE)
 	{
-		w->f.colors = 327700;
-        pick_f(w);
+		w->f.colors_out = 327700;
+		w->f.colors_in = 0x3a5266;
+		pick_f(w);
 	}
 	if (keycode == KEY_TWO)
 	{
-		w->f.colors = 4850000;
-        pick_f(w);
+		w->f.colors_out = 0x10182e;
+		w->f.colors_in = 0x0c1023;
+		pick_f(w);
 	}
+}
+
+void	pick_color_345(int keycode, t_w *w)
+{
 	if (keycode == KEY_THREE)
 	{
-		w->f.colors = 8104657;
-        pick_f(w);
+		w->f.colors_out = 0x8d697a;
+		w->f.colors_in = 0x544e68;
+		pick_f(w);
 	}
 	if (keycode == KEY_FOUR)
 	{
-		w->f.colors = 1746987;
-        pick_f(w);
+		w->f.colors_out = 0x408898;
+		w->f.colors_in = 0x1c1a3a;
+		pick_f(w);
 	}
 	if (keycode == KEY_FIVE)
 	{
-		w->f.colors = 164176229;
-        pick_f(w);
+		w->f.colors_out = 64176229;
+		pick_f(w);
 	}
 }
 
-
-void    julia_changes(int keycode, t_w *w)
+void	frac_moove(int keycode, t_w *w)
 {
-    if (keycode == KEY_O)
-	{
-		w->f.p /= 1.001;
-        pick_f(w);
-	}
-	if (keycode == KEY_I)
-	{
-		w->f.p *= 1.001;
-        pick_f(w);
-	}
-}
-
-void    frac_moove(int keycode, t_w *w)
-{
-	if(keycode == KEY_LEFT)
+	if (keycode == KEY_LEFT)
 	{
 		w->f.nx -= 0.1 * w->f.h ;
-	    pick_f(w);
+		pick_f(w);
 	}
 	if (keycode == KEY_RIGHT)
 	{
-	    w->f.nx += 0.1 * w->f.h;
-        pick_f(w);
+		w->f.nx += 0.1 * w->f.h;
+		pick_f(w);
 	}
 	if (keycode == KEY_DOWN)
 	{
 		w->f.ny -= 0.1 * w->f.h;
-        pick_f(w);
+		pick_f(w);
 	}
 	if (keycode == KEY_UP)
 	{
 		w->f.ny += 0.1 * w->f.h;
-        pick_f(w);
-	}
-}
-
-void	stop_prog(int keycode, t_w *w)
-{
-	if (keycode == KEY_ESC)
-	{
-		mlx_destroy_window(w->mlx, w->mlx_w);
-		exit(1);
+		pick_f(w);
 	}
 }
 
@@ -118,38 +110,22 @@ int	key_hook(int keycode, t_w *w)
 	{
 		w->f.h /= 1.1;
 		w->f.m *= 1.001;
-        pick_f(w);
+		pick_f(w);
 	}
 	if (keycode == KEY_MINUS)
 	{
-	    w->f.h *= 1.1;
-	    w->f.m /= 1.001;
-        pick_f(w);
+		w->f.h *= 1.1;
+		w->f.m /= 1.001;
+		pick_f(w);
 	}
 	if (keycode == KEY_P)
 	{
-		w->f.h = 1;
-		w->f.nx = 0;
-		w->f.ny = 0;
-        pick_f(w);
+		reset_frac(w);
+		pick_f(w);
 	}
 	stop_prog(keycode, w);
-    frac_moove(keycode, w);
-    julia_changes(keycode, w);
-    pick_color(keycode, w);
-	return (0);
-}
-
-int	destroy_window(t_w *w)
-{
-	mlx_destroy_window(w->mlx, w->mlx_w);
-	exit(1);
-}
-
-int mouse_motion_hook(int x, int y, t_w *w)
-{
-	w->j.cx = x / w->f.zoom_x + w->f.x1;
-	w->j.cy = -(y / w->f.zoom_y + w->f.y1);
-	pick_f(w);
+	frac_moove(keycode, w);
+	julia_changes(keycode, w);
+	pick_color(keycode, w);
 	return (0);
 }

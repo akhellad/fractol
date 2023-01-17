@@ -11,7 +11,8 @@ SRC		=	fractol.c \
 			hooks.c \
 			mendel.c \
 			julia.c \
-			burning_ship.c
+			burning_ship.c \
+			draw.c
 
 OBJ		= 	$(addprefix $(OBJDIR)/,$(SRC:.c=.o))
 
