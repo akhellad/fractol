@@ -6,7 +6,7 @@
 /*   By: akhellad <akhellad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 13:43:08 by akhellad          #+#    #+#             */
-/*   Updated: 2023/01/17 17:13:36 by akhellad         ###   ########.fr       */
+/*   Updated: 2023/01/17 18:07:21 by akhellad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,14 +63,14 @@ void	pick_color_345(int keycode, t_w *w)
 {
 	if (keycode == KEY_THREE)
 	{
-		w->f.colors_out = 0x8d697a;
-		w->f.colors_in = 0x544e68;
+		w->f.colors_in = 0xb8c2b9;
+		w->f.colors_out = 0x000026;
 		pick_f(w);
 	}
 	if (keycode == KEY_FOUR)
 	{
-		w->f.colors_out = 0x408898;
-		w->f.colors_in = 0x1c1a3a;
+		w->f.colors_out = 0x382b26;
+		w->f.colors_in = 0xb8c2b9;
 		pick_f(w);
 	}
 	if (keycode == KEY_FIVE)

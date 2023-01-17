@@ -6,7 +6,7 @@
 /*   By: akhellad <akhellad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/17 13:38:04 by akhellad          #+#    #+#             */
-/*   Updated: 2023/01/17 16:23:45 by akhellad         ###   ########.fr       */
+/*   Updated: 2023/01/17 17:56:14 by akhellad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ void	draw(t_w *w)
 	{
 		color = w->f.count * 256 / w->f.iteration_max;
 		n_color = 0;
-		n_color = w->f.colors_out + (0 << 24 | (color) << 16 \
-								| (color) << 8 | (color));
+		n_color = w->f.colors_out + (((0 << 24) & 0xFF) | (((color) << 16) & 0xFF) \
+								| (((color) << 8) & 0xFF) | (((color) & 0xFF)));
 		my_mlx_pixel_put(&w->img1, w->f.x, w->f.y, n_color);
 	}
 }
