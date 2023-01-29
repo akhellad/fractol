@@ -6,13 +6,20 @@ SRCDIR	=	./src
 INCDIR	=	./includes
 OBJDIR	=	./obj
 
-SRC		=	fractol.c \
+SRC		=	main.c \
 			utils.c \
-			hooks.c \
-			mendel.c \
+			fractal_set.c \
+			mandelbrot.c \
+			param.c \
+			window.c \
+			image.c \
+			thread.c \
+			color.c \
 			julia.c \
+			hook.c \
 			burning_ship.c \
-			draw.c
+			palettes.c \
+
 
 OBJ		= 	$(addprefix $(OBJDIR)/,$(SRC:.c=.o))
 

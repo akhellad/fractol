@@ -1,63 +1,60 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: akhellad <akhellad@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/17 13:54:32 by akhellad          #+#    #+#             */
-/*   Updated: 2023/01/17 13:54:53 by akhellad         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../includes/fractol.h"
 
-int	ft_strcmp(char *s1, char *s2)
+size_t	ft_strlen(const char *s)
 {
-	unsigned int	i;
+	size_t i;
 
 	i = 0;
-	while (s1[i] || s2[i])
+	while (s[i])
+		i++;
+	return (i);
+}
+
+void	ft_putendl(char const *s)
+{
+	write(1, s, ft_strlen(s));
+}
+
+int	ft_strcmp(const char *s1, const char *s2)
+{
+	while (*s1 && *s1 == *s2)
 	{
-		if (s1[i] == s2[i])
-			i ++;
-		else
-			return (1);
+		s1++;
+		s2++;
 	}
-	return (0);
+	return ((unsigned char)*s1 - (unsigned char)*s2);
 }
 
-int	destroy_window(t_w *w)
+void	*ft_memalloc(size_t size)
 {
-	mlx_destroy_window(w->mlx, w->mlx_w);
-	exit(1);
+	void *ptr;
+
+	ptr = malloc(size);
+	if (ptr == NULL)
+		return (NULL);
+	ft_bzero(ptr, size);
+	return (ptr);
 }
 
-void	stop_prog(int keycode, t_w *w)
+void	*ft_bzero(void *s, size_t n)
 {
-	if (keycode == KEY_ESC)
+	while (n > 0)
 	{
-		mlx_destroy_window(w->mlx, w->mlx_w);
-		exit(1);
+		n--;
+		((unsigned char *)s)[n] = 0;
 	}
+	return (s);
 }
 
-void	reset_frac(t_w *w)
+void	ft_memdel(void **ap)
 {
-	w->f.h = 1;
-	w->f.nx = 0;
-	w->f.ny = 0;
-	w->f.pos_x = 0;
-	w->f.pos_y = 0;
-	pick_f(w);
+	free(*ap);
+	*ap = (NULL);
 }
 
-void	pick_f(t_w *w)
+int		ft_lerpi(int first, int second, double p)
 {
-	if (!ft_strcmp(w->f.name, "mendel"))
-		mendel(w);
-	if (!ft_strcmp(w->f.name, "julia"))
-		julia(w);
-	if (!ft_strcmp(w->f.name, "burning_ship"))
-		burning_ship(w);
+	if (first == second)
+		return (first);
+	return ((int)((double)first + (second - first) * p));
 }

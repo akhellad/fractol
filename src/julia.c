@@ -1,72 +1,50 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   julia.c                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: akhellad <akhellad@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/17 13:51:01 by akhellad          #+#    #+#             */
-/*   Updated: 2023/01/17 13:52:24 by akhellad         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../includes/fractol.h"
 
-void	julia_set(t_w *w)
+int		julia_hook_mousemove(int x, int y, t_mlx *mlx)
 {
-	while (w->f.x < w->f.image_x)
-	{
-		while (w->f.y < w->f.image_y)
-		{
-			w->f.zx = w->f.x / w->f.zoom_x + w->f.x1;
-			w->f.zy = w->f.y / w->f.zoom_y + w->f.y1;
-			w->f.cx = w->j.cx;
-			w->f.cy = w->j.cy;
-			w->f.count = 0;
-			count(w);
-			draw(w);
-			w->f.y ++;
-		}
-		w->f.y = 0;
-		w->f.x ++;
-	}
-}
-
-void	julia(t_w *w)
-{
-	w->f.x1 = w->f.nx + (-1 * w->f.h);
-	w->f.x2 = w->f.nx + (1 * w->f.h);
-	w->f.y1 = w->f.ny + (-1.2 * w->f.h);
-	w->f.y2 = w->f.ny + (1.2 * w->f.h);
-	w->f.image_x = w->f.w_len;
-	w->f.image_y = w->f.w_len;
-	w->f.iteration_max = 150 * w->f.m;
-	w->f.x = 0;
-	w->f.y = 0;
-	julia_set(w);
-	w->f.zoom_x = w->f.image_x / (w->f.x2 - w->f.x1);
-	w->f.zoom_y = w->f.image_y / (w->f.y2 - w->f.y1);
-	mlx_put_image_to_window(w->mlx, w->mlx_w, w->img1.img, 0, 0);
-}
-
-void	julia_changes(int keycode, t_w *w)
-{
-	if (keycode == KEY_O)
-	{
-		w->f.p /= 1.001;
-		pick_f(w);
-	}
-	if (keycode == KEY_I)
-	{
-		w->f.p *= 1.001;
-		pick_f(w);
-	}
-}
-
-int	mouse_motion_hook(int x, int y, t_w *w)
-{
-	w->j.cx = x / w->f.zoom_x + w->f.x1;
-	w->j.cy = -(y / w->f.zoom_y + w->f.y1);
-	pick_f(w);
+	mlx->mouse.lastx = mlx->mouse.x;
+	mlx->mouse.lasty = mlx->mouse.y;
+	mlx->mouse.x = x;
+	mlx->mouse.y = y;
+	if (!mlx->mouselock)
+		mlx->param.mouse = convert(x, y, &mlx->param);
+	if (mlx->fr->mouse && !mlx->mouselock)
+		render(mlx);
 	return (0);
+}
+
+t_pixel		julia_set(int x, int y, t_param *v, t_mlx *mlx)
+{
+	t_complex	z;
+	t_complex	c;
+	t_complex	temp;
+	int			i;
+
+	(void)mlx;
+	z = convert(x, y, v);
+	c = v->mouse;
+	i = 0;
+	while (z.r * z.r + z.i * z.i < 4 && i < v->max)
+	{
+		temp.r = z.r * z.r - z.i * z.i + c.r;
+		temp.i = z.r * z.i * 2 + c.i;
+		if (z.r == temp.r && z.i == temp.i)
+		{
+			i = v->max;
+			break ;
+		}
+		z.r = temp.r;
+		z.i = temp.i;
+		i++;
+	}
+	return ((t_pixel){.c = z, .i = i});
+}
+
+
+void		julia_param(t_param *v)
+{
+	v->xmin = -2.0f;
+	v->xmax = 2.0f;
+	v->ymin = -2.0f;
+	v->ymax = 2.0f;
 }

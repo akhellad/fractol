@@ -1,130 +1,194 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   fractol.h                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: akhellad <akhellad@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/17 14:00:16 by akhellad          #+#    #+#             */
-/*   Updated: 2023/01/17 17:11:54 by akhellad         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef FRACTOL_H
 # define FRACTOL_H
 
-# include "../mlx/mlx.h"
-# include <stdio.h>
-# include <math.h>
-# include <stdlib.h>
+# include <stdint.h>
+# include <pthread.h>
 # include <unistd.h>
+# include <stdlib.h>
+# include <math.h>
+# include "../mlx/mlx.h"
+# include "key.h"
 
-# define KEY_UP 126
-# define KEY_DOWN 125
-# define KEY_RIGHT 124
-# define KEY_LEFT 123
-# define KEY_O 31
-# define KEY_I 34
-# define KEY_P 35
-# define KEY_PLUS 69
-# define KEY_MINUS 78
-# define KEY_ONE 83
-# define KEY_TWO 84
-# define KEY_THREE 85
-# define KEY_FOUR 86
-# define KEY_FIVE 87
-# define KEY_SIX 88
-# define KEY_ESC 53
+# define WIN_WIDTH 400
+# define WIN_HEIGHT 400
+# define ZOOM 1.1f
+# define THREADS 8
 
-enum {
-	ON_KEYDOWN = 2,
-	ON_KEYUP = 3,
-	ON_MOUSEDOWN = 4,
-	ON_MOUSEUP = 5,
-	ON_MOUSEMOVE = 6,
-	ON_EXPOSE = 12,
-	ON_DESTROY = 17
+typedef struct		s_rgba
+{
+	uint8_t		b;
+	uint8_t		g;
+	uint8_t		r;
+	uint8_t		a;
+}					t_rgba;
+
+typedef union		u_color
+{
+	int			value;
+	t_rgba		rgba;
+}					t_color;
+
+typedef struct		s_palette
+{
+	uint8_t		count;
+	int			cycle;
+	int			colors[16];
+}					t_palette;
+
+
+typedef struct		s_complex
+{
+	double		r;
+	double		i;
+}					t_complex;
+
+typedef struct		s_mouse
+{
+	char		isdown;
+	int			x;
+	int			y;
+	int			lastx;
+	int			lasty;
+}					t_mouse;
+
+typedef struct		s_img
+{
+	void		*img;
+	char		*adrr;
+	int			bpp;
+	int			lengh;
+	int			endian;
+}					t_img;
+
+typedef struct		s_param
+{
+	double		xmin;
+	double		xmax;
+	double		ymin;
+	double		ymax;
+	double		zoom;
+	double		offx;
+	double		offy;
+	long		max;
+	double 		*coefs; 
+	int 		degree;
+	t_complex	mouse;
+}					t_param;
+
+typedef struct		s_pixel
+{
+	t_complex	c;
+	long		i;
+}					t_pixel;
+typedef struct s_mlx	t_mlx;
+
+typedef void		(*t_f_fn_v)(t_param *v);
+typedef t_pixel		(*t_f_fn_p)(int x, int y, t_param *v, t_mlx *mlx);
+typedef struct		s_fr
+{
+	char		*name;
+	t_f_fn_v	param;
+	t_f_fn_p	pixel;
+	int			mouse;
+}					t_fr;
+
+typedef struct		s_thread
+{
+	int				id;
+	t_mlx			*mlx;
+}					t_thread;
+
+typedef struct		s_render
+{
+	pthread_t		threads[THREADS];
+	t_thread		args[THREADS];
+}					t_render;
+
+struct				s_mlx
+{
+	void		*mlx;
+	void		*window;
+	t_fr	    *fr;
+	t_pixel		*data;
+	t_img		*img;
+	t_mouse		mouse;
+	t_param	    param;
+	t_palette	*palette;
+	t_render	render;
+	int			smooth;
+	int			mouselock;
 };
 
-typedef struct s_data
-{
-	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
-}			t_data;
 
-typedef struct s_jul
-{
-	double	cx;
-	double	cy;
+//main.c
+int		    error(char *reason);
 
-}				t_jul;
+//mandelbrot.c
+void		mandelbrot_param(t_param *v);
+t_pixel		mandelbrot_set(int x, int y, t_param *v, t_mlx *mlx);
 
-typedef struct s_f {
-	double			x1;
-	double			y1;
-	double			x2;
-	double			y2;
-	double			zx;
-	double			zy;
-	double			cx;
-	double			cy;
-	double			tempx;
-	double			image_x;
-	double			image_y;
-	double			zoom_x;
-	double			zoom_y;
-	double			pos_x;
-	double			pos_y;
-	int				x;
-	int				y;
-	int				count;
-	int				iteration_max;
-	int				w_len;
-	double			h;
-	double			p;
-	double			m;
-	double			nx;
-	double			ny;
-	char			*name;
-	unsigned int	colors_out;
-	unsigned int	colors_in;
-	int				j;
-}			t_f;
+//fractal_set.c
+t_fr	    *get_fractals(void);
+t_fr	    *fractal_match(char *str);
 
-typedef struct s_w {
-	void	*mlx;
-	void	*mlx_w;
-	t_data	img1;
-	t_f		f;
-	t_jul	j;
-}				t_w;
+//param.c
+t_complex	convert(int x, int y, t_param *v);
+void		reset_param(t_mlx *mlx);
+void		param_fit(t_param *p);
 
-int		ft_strcmp(char *s1, char *s2);
-int		mouse_hook(int keycode, int x, int y, t_w *w);
-void	pick_f(t_w *w);
-void	julia(t_w *w);
-void	mendel(t_w *w);
-int		key_hook(int keycode, t_w *w);
-void	count(t_w *w);
-void	draw(t_w *w);
-void	frac_moove(int keycode, t_w *w);
-int		mouse_motion_hook(int x, int y, t_w *w);
-void	count_burning_ship(t_w *w);
-int		mouse_drag_hook(int x, int y, t_w *w);
-void	mendel_calc(t_w *w);
-void	burning_ship(t_w *w);
-void	burning_ship_set(t_w *w);
-void	julia_set(t_w *w);
-void	stop_prog(int keycode, t_w *w);
-int		destroy_window(t_w *w);
-void	reset_frac(t_w *w);
-void	julia_changes(int keycode, t_w *w);
-void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
-void	pick_color(int keycode, t_w *w);
-void	pick_color_012(int keycode, t_w *w);
-void	pick_color_345(int keycode, t_w *w);
+//utils.c
+int	        ft_strcmp(const char *s1, const char *s2);
+void	    ft_putendl(char const *s);
+size_t	    ft_strlen(const char *s);
+void	    *ft_memalloc(size_t size);
+void	    *ft_bzero(void *s, size_t n);
+void	    ft_memdel(void **ap);
+int		    ft_lerpi(int first, int second, double p);
+
+//image.c
+t_img	    *new_image(t_mlx *mlx);
+t_img	    *del_image(t_mlx *mlx, t_img *img);
+void	    my_mlx_pixel_put(t_img *data, int x, int y, int color);
+
+//window.c
+t_mlx		*mlx_del(t_mlx *mlx);
+t_mlx		*init_mlx(t_fr *f);
+
+//color.c
+int			choose_color(t_pixel p, t_mlx *mlx);
+t_color		smooth_color(t_pixel p, int max, t_palette *pal);
+t_color		linear_color(double i, int max, t_palette *p);
+t_color		clerp(t_color c1, t_color c2, double p);
+
+//thread.c
+void		render(t_mlx *mlx);
+void		draw(t_mlx *mlx);
+void		*apply_thread(void *m);
+
+//julia.c
+void		julia_param(t_param *v);
+t_pixel		julia_set(int x, int y, t_param *v, t_mlx *mlx);
+int		    julia_hook_mousemove(int x, int y, t_mlx *mlx);
+
+//hook.c
+int		    key_hook(int key, t_mlx *mlx);
+void	    move(int key, t_mlx *mlx);
+void		zoom(int x, int y, t_param *v, double z);
+int		    mouse_hook(int button, int x, int y, t_mlx *mlx);
+int			mouse_release_hook(int button, t_mlx *mlx);
+
+//burning_ship.c
+t_pixel		burningship_set(int x, int y, t_param *v, t_mlx *mlx);
+void		burningship_param(t_param *v);
+
+//palettes.c
+t_palette	*get_palettes(void);
+t_palette	*get_palettes2(void);
+t_palette	*get_palettes3(void);
+t_palette	*get_palettes4(void);
+
+//sierpinski.c
+void 		sierpinski_param(t_param *v);
+t_pixel 	sierpinski_set(int x, int y, t_param *v, t_mlx *mlx);
 
 #endif
