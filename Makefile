@@ -19,6 +19,7 @@ SRC		=	main.c \
 			hook.c \
 			burning_ship.c \
 			palettes.c \
+			interface.c
 
 
 OBJ		= 	$(addprefix $(OBJDIR)/,$(SRC:.c=.o))

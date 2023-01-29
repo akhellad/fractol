@@ -38,25 +38,14 @@ void	move(int key, t_mlx *mlx)
 void	color_change(int key, t_mlx *mlx)
 {
 	if (key == KEY_ONE)
-	{
 		mlx->palette = get_palettes();
-		render(mlx);
-	}
-		if (key == KEY_TWO)
-	{
+	if (key == KEY_TWO)
 		mlx->palette = get_palettes2();
-		render(mlx);
-	}
-		if (key == KEY_THREE)
-	{
+	if (key == KEY_THREE)
 		mlx->palette = get_palettes3();
-		render(mlx);
-	}
-		if (key == KEY_FOUR)
-	{
+	if (key == KEY_FOUR)
 		mlx->palette = get_palettes4();
-		render(mlx);
-	}
+	render(mlx);
 
 }
 
@@ -85,9 +74,6 @@ int		key_hook(int key, t_mlx *mlx)
 
 int		mouse_hook(int button, int x, int y, t_mlx *mlx)
 {
-	int i;
-
-	i = 0;
 	if (button == 4)
 	{
 		zoom(x, y, &mlx->param, 1 / ZOOM);
@@ -100,14 +86,5 @@ int		mouse_hook(int button, int x, int y, t_mlx *mlx)
 	}
 	if (y < 0)
 		return (0);
-	if (button == 1)
-		i -= 1;
-	if (button == 3)
-		i += 1;
-	if (i == -1)
-		mlx->mouse.isdown |= 1 << button;
-	else
-		mlx->mouse.isdown &= ~(1 << button);
-	printf("%d\n", i);
 	return (0);
 }

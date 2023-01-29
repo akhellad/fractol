@@ -47,6 +47,8 @@ void		draw(t_mlx *mlx)
 		y++;
 	}
 	mlx_put_image_to_window(mlx->mlx, mlx->window, mlx->img->img, 0, 0);
+	draw_limits(mlx);
+	display_controls(mlx);
 }
 
 void		render(t_mlx *mlx)

@@ -18,5 +18,8 @@
 # define KEY_SIX 45
 # define KEY_ZERO 65438
 # define KEY_ESC 65307
+# define KEY_ONE_PAD 65436
+# define KEY_TWO_PAD 65433
+# define KEY_THREE_PAD 65435
 
 #endif

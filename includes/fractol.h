@@ -9,8 +9,8 @@
 # include "../mlx/mlx.h"
 # include "key.h"
 
-# define WIN_WIDTH 400
-# define WIN_HEIGHT 400
+# define WIN_WIDTH 600
+# define WIN_HEIGHT 560
 # define ZOOM 1.1f
 # define THREADS 8
 
@@ -123,6 +123,7 @@ struct				s_mlx
 //main.c
 int		    error(char *reason);
 
+
 //mandelbrot.c
 void		mandelbrot_param(t_param *v);
 t_pixel		mandelbrot_set(int x, int y, t_param *v, t_mlx *mlx);
@@ -164,6 +165,7 @@ t_color		clerp(t_color c1, t_color c2, double p);
 void		render(t_mlx *mlx);
 void		draw(t_mlx *mlx);
 void		*apply_thread(void *m);
+void		image_set_pixel(t_img *image, int x, int y, int color);
 
 //julia.c
 void		julia_param(t_param *v);
@@ -187,8 +189,13 @@ t_palette	*get_palettes2(void);
 t_palette	*get_palettes3(void);
 t_palette	*get_palettes4(void);
 
-//sierpinski.c
-void 		sierpinski_param(t_param *v);
-t_pixel 	sierpinski_set(int x, int y, t_param *v, t_mlx *mlx);
+//interface.c
+void 		my_mlx_string_put(t_mlx *mlx, int x, int y, char *string);
+void 		mlx_fill_rectangle(t_mlx *mlx, int x, int y, int width, int height);
+void    	draw_line_x(t_mlx *mlx, int y);
+void    	draw_line_y(t_mlx *mlx, int x0);
+void 		draw_limits(t_mlx *mlx);
+void    	display_controls(t_mlx *mlx);
+
 
 #endif
