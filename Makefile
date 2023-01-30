@@ -19,13 +19,17 @@ SRC		=	main.c \
 			hook.c \
 			burning_ship.c \
 			palettes.c \
-			interface.c
+			interface.c \
+			ft_itoa.c \
+			screen.c \
+			multibrot.c \
+			newton.c
 
 
 OBJ		= 	$(addprefix $(OBJDIR)/,$(SRC:.c=.o))
 
 CC		=	gcc
-CFLAGS	=	-Wall -Wextra -Werror -o2 -march=native -g
+CFLAGS	=	-Wall -Wextra -Werror -o2 -march=native -g3
 
 MLX_INC	=	-I $(MLX)
 MLX_LIB	=	$(addprefix $(MLX),mlx.a)

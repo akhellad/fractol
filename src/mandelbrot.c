@@ -37,3 +37,4 @@ t_pixel		mandelbrot_set(int x, int y, t_param *v, t_mlx *mlx)
 	}
 	return ((t_pixel){.c = z, .i = i});
 }
+

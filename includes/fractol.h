@@ -9,8 +9,9 @@
 # include "../mlx/mlx.h"
 # include "key.h"
 
-# define WIN_WIDTH 600
-# define WIN_HEIGHT 560
+
+# define WIN_WIDTH 900
+# define WIN_HEIGHT 720
 # define ZOOM 1.1f
 # define THREADS 8
 
@@ -72,6 +73,7 @@ typedef struct		s_param
 	long		max;
 	double 		*coefs; 
 	int 		degree;
+	double		power;
 	t_complex	mouse;
 }					t_param;
 
@@ -188,6 +190,7 @@ t_palette	*get_palettes(void);
 t_palette	*get_palettes2(void);
 t_palette	*get_palettes3(void);
 t_palette	*get_palettes4(void);
+t_palette 	*get_palettes5(void);
 
 //interface.c
 void 		my_mlx_string_put(t_mlx *mlx, int x, int y, char *string);
@@ -197,5 +200,16 @@ void    	draw_line_y(t_mlx *mlx, int x0);
 void 		draw_limits(t_mlx *mlx);
 void    	display_controls(t_mlx *mlx);
 
+//Multibrot.c
+void 		Multibrot_param(t_param *v);
+t_pixel		Multibrot_set(int x, int y, t_param *v, t_mlx *mlx);
+
+//newton.c
+t_pixel 	newton_set(int x, int y, t_param *v, t_mlx *mlx);
+void 		newton_param(t_param *v);
+
+char	*ft_itoa(int n);
+
+void capture_image_mlx(void *mlx_img, int width, int height);
 
 #endif

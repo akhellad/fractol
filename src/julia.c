@@ -48,3 +48,5 @@ void		julia_param(t_param *v)
 	v->ymin = -2.0f;
 	v->ymax = 2.0f;
 }
+
+

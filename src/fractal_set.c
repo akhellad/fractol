@@ -5,7 +5,9 @@ t_fr	*get_fractals(void)
 	static t_fr array[8] = {
 		{"Mandel", mandelbrot_param, mandelbrot_set, 0},
 		{"Julia", julia_param, julia_set, 1},
-		{"burningship", burningship_param, burningship_set, 0},
+		{"Burning_ship", burningship_param, burningship_set, 0},
+		{"Multibrot", Multibrot_param, Multibrot_set, 0},
+		{"Newton", newton_param, newton_set, 0},
 		{NULL, NULL, NULL, 0}
 	};
 

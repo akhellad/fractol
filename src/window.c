@@ -19,7 +19,7 @@ t_mlx		*init_mlx(t_fr *f)
 		return (NULL);
 	title ="Fract'ol";
 	if ((mlx->mlx = mlx_init()) == NULL ||
-		(mlx->window = mlx_new_window(mlx->mlx, WIN_WIDTH * 1.3,
+		(mlx->window = mlx_new_window(mlx->mlx, WIN_WIDTH,
 			WIN_HEIGHT, title)) == NULL ||
 		(mlx->img = new_image(mlx)) == NULL ||
 		(mlx->data = ft_memalloc(sizeof(t_pixel) * WIN_WIDTH
