@@ -1,8 +1,20 @@
-# include "../includes/fractol.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   color.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akhellad <akhellad@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/06 14:59:07 by akhellad          #+#    #+#             */
+/*   Updated: 2023/02/06 15:06:44 by akhellad         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-t_color		clerp(t_color c1, t_color c2, double p)
+#include "../includes/fractol.h"
+
+t_color	clerp(t_color c1, t_color c2, double p)
 {
-	t_color c;
+	t_color	c;
 
 	if (c1.value == c2.value)
 		return (c1);
@@ -13,13 +25,13 @@ t_color		clerp(t_color c1, t_color c2, double p)
 	return (c);
 }
 
-t_color		linear_color(double i, int max, t_palette *p)
+t_color	linear_color(double i, int max, t_palette *p)
 {
 	double		index;
 	double		adjust;
 	int			c;
-    (void)max;
 
+	(void)max;
 	if (p->cycle)
 		index = fmod(i, p->cycle - 1) / (p->cycle - 1);
 	else
@@ -31,11 +43,11 @@ t_color		linear_color(double i, int max, t_palette *p)
 		(int)(adjust + 1) - adjust));
 }
 
-t_color		smooth_color(t_pixel p, int max, t_palette *pal)
+t_color	smooth_color(t_pixel p, int max, t_palette *pal)
 {
-	double i;
-	double zn;
-	double nu;
+	double	i;
+	double	zn;
+	double	nu;
 
 	zn = log(p.c.r * p.c.r + p.c.i * p.c.i) / 2.0f;
 	nu = log(zn / log(2)) / log(2);
@@ -45,8 +57,7 @@ t_color		smooth_color(t_pixel p, int max, t_palette *pal)
 	return (linear_color(i, max, pal));
 }
 
-
-int			choose_color(t_pixel p, t_mlx *mlx)
+int	choose_color(t_pixel p, t_mlx *mlx)
 {
 	if (p.i >= mlx->param.max)
 		return (0x000000);
@@ -55,3 +66,17 @@ int			choose_color(t_pixel p, t_mlx *mlx)
 	return (linear_color((double)p.i, mlx->param.max, mlx->palette).value);
 }
 
+void	color_change(int key, t_mlx *mlx)
+{
+	if (key == KEY_ONE)
+		mlx->palette = get_palettes();
+	if (key == KEY_TWO)
+		mlx->palette = get_palettes2();
+	if (key == KEY_THREE)
+		mlx->palette = get_palettes3();
+	if (key == KEY_FOUR)
+		mlx->palette = get_palettes4();
+	if (key == KEY_FIVE)
+		mlx->palette = get_palettes5();
+	render(mlx);
+}

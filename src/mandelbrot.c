@@ -1,8 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   mandelbrot.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akhellad <akhellad@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/06 15:18:42 by akhellad          #+#    #+#             */
+/*   Updated: 2023/02/06 15:19:07 by akhellad         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/fractol.h"
-#include <math.h>
 
-
-void		mandelbrot_param(t_param *v)
+void	mandelbrot_param(t_param *v)
 {
 	v->xmin = -2.0f;
 	v->xmax = 1.0f;
@@ -11,7 +21,7 @@ void		mandelbrot_param(t_param *v)
 	v->offx = -0.5f;
 }
 
-t_pixel		mandelbrot_set(int x, int y, t_param *v, t_mlx *mlx)
+t_pixel	mandelbrot_set(int x, int y, t_param *v, t_mlx *mlx)
 {
 	t_complex	z;
 	t_complex	c;
@@ -37,4 +47,3 @@ t_pixel		mandelbrot_set(int x, int y, t_param *v, t_mlx *mlx)
 	}
 	return ((t_pixel){.c = z, .i = i});
 }
-

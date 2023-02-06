@@ -1,11 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   hook.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akhellad <akhellad@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/06 15:03:17 by akhellad          #+#    #+#             */
+/*   Updated: 2023/02/06 15:28:33 by akhellad         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/fractol.h"
 
-void		zoom(int x, int y, t_param *v, double z)
+void	zoom(int x, int y, t_param *v, double z)
 {
-	double w;
-	double h;
-	double nw;
-	double nh;
+	double	w;
+	double	h;
+	double	nw;
+	double	nh;
 
 	w = (v->xmax - v->xmin) * (v->zoom);
 	h = (v->ymax - v->ymin) * (v->zoom);
@@ -18,8 +30,8 @@ void		zoom(int x, int y, t_param *v, double z)
 
 void	move(int key, t_mlx *mlx)
 {
-	double w;
-	double h;
+	double	w;
+	double	h;
 
 	w = (mlx->param.xmax - mlx->param.xmin) * mlx->param.zoom;
 	h = (mlx->param.ymax - mlx->param.ymin) * mlx->param.zoom;
@@ -33,24 +45,6 @@ void	move(int key, t_mlx *mlx)
 		mlx->param.offx += w * 0.05f;
 	if (key == KEY_P)
 		mlx->mouselock = 1 - mlx->mouselock;
-	if (key == KEY_SIX)
-		capture_image_mlx(mlx->img, WIN_WIDTH, WIN_HEIGHT);
-}
-
-void	color_change(int key, t_mlx *mlx)
-{
-	if (key == KEY_ONE)
-		mlx->palette = get_palettes();
-	if (key == KEY_TWO)
-		mlx->palette = get_palettes2();
-	if (key == KEY_THREE)
-		mlx->palette = get_palettes3();
-	if (key == KEY_FOUR)
-		mlx->palette = get_palettes4();
-	if (key == KEY_FIVE)
-		mlx->palette = get_palettes5();
-	render(mlx);
-
 }
 
 void	change_frac(int key, t_mlx *mlx)
@@ -61,12 +55,12 @@ void	change_frac(int key, t_mlx *mlx)
 		mlx->fr = fractal_match("Julia");
 	if (key == KEY_THREE_PAD)
 		mlx->fr = fractal_match("Burning_ship");
+	if (key == KEY_FOUR_PAD)
+		mlx->fr = fractal_match("multibrot");
 	render(mlx);
 }
 
-#include <stdio.h>
-
-int		key_hook(int key, t_mlx *mlx)
+int	key_hook(int key, t_mlx *mlx)
 {
 	if (key == KEY_ESC)
 		exit(EXIT_SUCCESS);
@@ -84,13 +78,11 @@ int		key_hook(int key, t_mlx *mlx)
 	change_frac(key, mlx);
 	move(key, mlx);
 	color_change(key, mlx);
-    render(mlx);
+	render(mlx);
 	return (0);
 }
 
-#include <stdio.h>
-
-int		mouse_hook(int button, int x, int y, t_mlx *mlx)
+int	mouse_hook(int button, int x, int y, t_mlx *mlx)
 {
 	if (button == 4)
 	{

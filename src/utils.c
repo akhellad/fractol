@@ -1,18 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akhellad <akhellad@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/06 16:31:54 by akhellad          #+#    #+#             */
+/*   Updated: 2023/02/06 16:32:18 by akhellad         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/fractol.h"
 
 size_t	ft_strlen(const char *s)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	while (s[i])
 		i++;
 	return (i);
-}
-
-void	ft_putendl(char const *s)
-{
-	write(1, s, ft_strlen(s));
 }
 
 int	ft_strcmp(const char *s1, const char *s2)
@@ -27,7 +34,7 @@ int	ft_strcmp(const char *s1, const char *s2)
 
 void	*ft_memalloc(size_t size)
 {
-	void *ptr;
+	void	*ptr;
 
 	ptr = malloc(size);
 	if (ptr == NULL)
@@ -50,11 +57,4 @@ void	ft_memdel(void **ap)
 {
 	free(*ap);
 	*ap = (NULL);
-}
-
-int		ft_lerpi(int first, int second, double p)
-{
-	if (first == second)
-		return (first);
-	return ((int)((double)first + (second - first) * p));
 }

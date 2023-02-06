@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   param.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akhellad <akhellad@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/06 16:00:15 by akhellad          #+#    #+#             */
+/*   Updated: 2023/02/06 16:00:34 by akhellad         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/fractol.h"
 
-void		param_fit(t_param *p)
+void	param_fit(t_param *p)
 {
-	double w;
-	double h;
+	double	w;
+	double	h;
 
 	w = p->xmax - p->xmin;
 	h = p->ymax - p->ymin;
@@ -19,7 +31,7 @@ void		param_fit(t_param *p)
 	}
 }
 
-void		reset_param(t_mlx *mlx)
+void	reset_param(t_mlx *mlx)
 {
 	mlx->param.offx = 0;
 	mlx->param.offy = 0;
@@ -39,4 +51,3 @@ t_complex	convert(int x, int y, t_param *v)
 		+ v->ymin + v->offy;
 	return (p);
 }
-

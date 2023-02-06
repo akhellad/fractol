@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   julia.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akhellad <akhellad@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/06 15:15:55 by akhellad          #+#    #+#             */
+/*   Updated: 2023/02/06 15:16:33 by akhellad         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/fractol.h"
 
-int		julia_hook_mousemove(int x, int y, t_mlx *mlx)
+int	julia_hook_mousemove(int x, int y, t_mlx *mlx)
 {
 	mlx->mouse.lastx = mlx->mouse.x;
 	mlx->mouse.lasty = mlx->mouse.y;
@@ -13,7 +25,7 @@ int		julia_hook_mousemove(int x, int y, t_mlx *mlx)
 	return (0);
 }
 
-t_pixel		julia_set(int x, int y, t_param *v, t_mlx *mlx)
+t_pixel	julia_set(int x, int y, t_param *v, t_mlx *mlx)
 {
 	t_complex	z;
 	t_complex	c;
@@ -40,13 +52,10 @@ t_pixel		julia_set(int x, int y, t_param *v, t_mlx *mlx)
 	return ((t_pixel){.c = z, .i = i});
 }
 
-
-void		julia_param(t_param *v)
+void	julia_param(t_param *v)
 {
 	v->xmin = -2.0f;
 	v->xmax = 2.0f;
 	v->ymin = -2.0f;
 	v->ymax = 2.0f;
 }
-
-

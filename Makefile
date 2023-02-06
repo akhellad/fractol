@@ -21,22 +21,21 @@ SRC		=	main.c \
 			palettes.c \
 			interface.c \
 			ft_itoa.c \
-			screen.c \
 			multibrot.c \
-			newton.c
 
 
 OBJ		= 	$(addprefix $(OBJDIR)/,$(SRC:.c=.o))
 
+HEADER	=	fractol.h
 CC		=	gcc
 CFLAGS	=	-Wall -Wextra -Werror -o2 -march=native -g3
 
 MLX_INC	=	-I $(MLX)
 MLX_LIB	=	$(addprefix $(MLX),mlx.a)
-MLX		=	./mlx
+MLX		=	./mlx1
 
 ifeq ($(OS), Linux)
-	MLX_LNK	= -L $(MLX) -l mlx -lXext -lX11  
+	MLX_LNK	= -L $(MLX) -l mlx -lXext -lX11 -lpthread
 else
 	MLX_LNK	= -L $(MLX) -l mlx -framework OpenGL -framework AppKit
 endif
@@ -53,7 +52,7 @@ ${OBJDIR}/%.o:${SRCDIR}/%.c
 $(MLX_LIB):
 	make -C $(MLX)
 
-$(NAME): $(OBJ)
+$(NAME): $(OBJ) $(HEADER)
 	$(CC) $(OBJ) ${MLX_LNK} -lm -o $(NAME)
 
 clean:

@@ -1,6 +1,18 @@
-# include "../includes/fractol.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   thread.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akhellad <akhellad@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/06 16:01:26 by akhellad          #+#    #+#             */
+/*   Updated: 2023/02/06 16:02:28 by akhellad         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-void		*apply_thread(void *m)
+#include "../includes/fractol.h"
+
+void	*apply_thread(void *m)
 {
 	t_thread	*t;
 	int			x;
@@ -13,7 +25,7 @@ void		*apply_thread(void *m)
 		x = 0;
 		while (x < WIN_WIDTH)
 		{
-			*(t->mlx->data + y * WIN_WIDTH + x) =
+			*(t->mlx->data + y * WIN_WIDTH + x) = \
 				t->mlx->fr->pixel(x, y, &t->mlx->param, t->mlx);
 			x++;
 		}
@@ -29,10 +41,10 @@ void	image_set_pixel(t_img *image, int x, int y, int color)
 	*(int *)(image->adrr + ((x + y * WIN_WIDTH) * image->bpp)) = color;
 }
 
-void		draw(t_mlx *mlx)
+void	draw(t_mlx *mlx)
 {
-	int x;
-	int y;
+	int	x;
+	int	y;
 
 	y = 0;
 	while (y < WIN_HEIGHT)
@@ -40,7 +52,7 @@ void		draw(t_mlx *mlx)
 		x = 0;
 		while (x < WIN_WIDTH)
 		{
-			image_set_pixel(mlx->img, x, y,
+			image_set_pixel(mlx->img, x, y, \
 					choose_color(*(mlx->data + y * WIN_WIDTH + x), mlx));
 			x++;
 		}
@@ -50,7 +62,7 @@ void		draw(t_mlx *mlx)
 	display_controls(mlx);
 }
 
-void		render(t_mlx *mlx)
+void	render(t_mlx *mlx)
 {
 	int			i;
 	t_render	*r;
@@ -72,4 +84,3 @@ void		render(t_mlx *mlx)
 	}
 	draw(mlx);
 }
-

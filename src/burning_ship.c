@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   burning_ship.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: akhellad <akhellad@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/06 14:56:56 by akhellad          #+#    #+#             */
+/*   Updated: 2023/02/06 14:58:54 by akhellad         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/fractol.h"
 
-t_pixel		burningship_set(int x, int y, t_param *v, t_mlx *mlx)
+t_pixel	burningship_set(int x, int y, t_param *v, t_mlx *mlx)
 {
 	t_complex	z;
 	t_complex	c;
@@ -29,7 +41,7 @@ t_pixel		burningship_set(int x, int y, t_param *v, t_mlx *mlx)
 	return ((t_pixel){.c = z, .i = i});
 }
 
-void		burningship_param(t_param *v)
+void	burningship_param(t_param *v)
 {
 	v->xmin = -2.0f;
 	v->xmax = 1.0f;
