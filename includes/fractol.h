@@ -6,7 +6,7 @@
 /*   By: akhellad <akhellad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 16:36:30 by akhellad          #+#    #+#             */
-/*   Updated: 2023/02/06 17:37:39 by akhellad         ###   ########.fr       */
+/*   Updated: 2024/02/05 12:59:27 by akhellad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <math.h>
-# include "../mlx1/mlx.h"
+# include "../mlx/mlx.h"
 # include "key.h"
 
 # define WIN_WIDTH 720

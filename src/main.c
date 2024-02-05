@@ -6,7 +6,7 @@
 /*   By: akhellad <akhellad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/06 15:16:51 by akhellad          #+#    #+#             */
-/*   Updated: 2023/02/06 16:54:57 by akhellad         ###   ########.fr       */
+/*   Updated: 2024/02/05 13:04:48 by akhellad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 int	error(char *reason)
 {
-	write(1, reason, ft_strlen(reason));
+	if (write(1, reason, ft_strlen(reason)) == -1)
+		return (1);
 	return (1);
 }
 
